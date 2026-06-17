@@ -21,6 +21,22 @@ def courier_create():
         client.delete_courier(courier_id)
 
 @pytest.fixture
+def courier_cleanup():
+
+    courier_credentials = []
+    
+    yield courier_credentials
+    
+    if courier_credentials:
+        login, password = courier_credentials
+        client = CourierClient()
+        
+        login_response = client.login_courier(login, password)
+        if login_response.status_code == 200:
+            courier_id = login_response.json().get('id')
+            client.delete_courier(courier_id)
+
+@pytest.fixture
 def clean_up_order():
     order = OrdersClient()
     order_data = {}

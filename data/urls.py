@@ -7,3 +7,7 @@ CREATED_ORDER_URL = "/api/v1/orders"
 CANCEL_ORDER_URL = "/api/v1/orders/cancel"
 
 GET_ORDERS_LIST = "/api/v1/orders"
+
+ACCEPT_ORDERS_URL = "/api/v1/orders/accept"
+
+GET_ORDER_BY_ID = "/api/v1/orders/track"

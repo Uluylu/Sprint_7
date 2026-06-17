@@ -1,35 +1,25 @@
 import allure
-import random
-import string
 from api.courier_client import CourierClient
 from data import messages
+from helpers.generations import generate_random_string
 
 
 class TestCreateCourier:
 
-    def generate_random_string(self, length):
-            letters = string.ascii_lowercase
-            random_string = ''.join(random.choice(letters) for i in range(length))
-            return random_string
-
     @allure.title("Успешное создание курьера со всеми обязательными полями")
-    def test_courier_create_success(self):
+    def test_courier_create_success(self, courier_cleanup):
         client = CourierClient()
         
-        login = self.generate_random_string(10)
-        password = self.generate_random_string(10)
-        first_name = self.generate_random_string(10)
+        login = generate_random_string(10)
+        password = generate_random_string(10)
+        first_name = generate_random_string(10)
+
+        courier_cleanup.extend([login, password])
 
         response = client.register_courier(login, password, first_name)
 
         assert response.status_code == 201
         assert response.json() == {"ok": True}
-
-        login_response = client.login_courier(login, password)
-        id_courier = login_response.json().get('id')
-
-        if id_courier:
-            client.delete_courier(id_courier)
 
     @allure.title("Нельзя создать двух одинаковых курьеров")
     def test_create_dublicate_courier_fails(self, courier_create):
@@ -48,8 +38,8 @@ class TestCreateCourier:
     def test_create_courier_without_login_field_fails(self):
         client = CourierClient()
 
-        password = self.generate_random_string(10)
-        first_name = self.generate_random_string(10)
+        password = generate_random_string(10)
+        first_name = generate_random_string(10)
 
         response = client.register_courier(None, password, first_name)
 
@@ -60,8 +50,8 @@ class TestCreateCourier:
     def test_create_courier_without_password_field_fails(self):
         client = CourierClient()
 
-        login = self.generate_random_string(10)
-        first_name = self.generate_random_string(10)
+        login = generate_random_string(10)
+        first_name = generate_random_string(10)
 
         response = client.register_courier(login, None, first_name)
 

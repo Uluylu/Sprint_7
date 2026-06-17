@@ -3,11 +3,13 @@ import random
 import string
 import data.urls
 
-def register_new_courier_and_return_login_password():
-    def generate_random_string(length):
+
+def generate_random_string(length):
         letters = string.ascii_lowercase
         random_string = ''.join(random.choice(letters) for i in range(length))
         return random_string
+
+def register_new_courier_and_return_login_password():
 
     login_pass = []
 
@@ -29,3 +31,17 @@ def register_new_courier_and_return_login_password():
         login_pass.append(first_name)
 
     return login_pass
+
+def get_order_payload(color_list=None):
+    payload = {
+        "firstName": "Иван",
+        "lastName": "Иванов",
+        "address": "ул. Ленина, д. 10",
+        "metroStation": 4,
+        "phone": "+7 999 111 22 33",
+        "rentTime": 3,
+        "deliveryDate": "2026-06-25",
+        "comment": "Жду у подъезда",
+        "color": color_list if color_list else []
+    }
+    return payload
